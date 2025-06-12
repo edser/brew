@@ -1,19 +1,44 @@
+# This file is synced from the `.github` repository, do not modify it directly.
+---
 version: 2
-
 updates:
-  - package-ecosystem: github-actions
-    directory: /
-    schedule:
-      interval: daily
-    # The actions in triage-issues.yml are updated in the Homebrew/.github repo
-    ignore:
-      - dependency-name: actions/stale
-      - dependency-name: dessant/lock-threads
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: friday
+    time: '08:00'
+    timezone: Etc/UTC
+  allow:
+  - dependency-type: all
+  groups:
+    github-actions:
+      patterns:
+      - "*"
+- package-ecosystem: docker
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: friday
+    time: '08:00'
+    timezone: Etc/UTC
+  allow:
+  - dependency-type: all
+  groups:
+    docker:
+      patterns:
+      - "*"
+- package-ecosystem: devcontainers
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: friday
+    time: '08:00'
+    timezone: Etc/UTC
+  allow:
+  - dependency-type: all
+  groups:
+    devcontainers:
+      patterns:
+      - "*"
 
-  - package-ecosystem: bundler
-    directory: /Library/Homebrew
-    schedule:
-      interval: daily
-    allow:
-      - dependency-type: all
-    versioning-strategy: lockfile-only

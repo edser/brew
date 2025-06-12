@@ -1,9 +1,9 @@
-# typed: false
 # frozen_string_literal: true
 
+require "cmd/leaves"
 require "cmd/shared_examples/args_parse"
 
-describe "brew leaves" do
+RSpec.describe Homebrew::Cmd::Leaves do
   it_behaves_like "parseable arguments"
 
   context "when there are no installed Formulae", :integration_test do
@@ -31,7 +31,7 @@ describe "brew leaves" do
     end
   end
 
-  context "when there are installed Formulae", :integration_test do
+  context "when there are installed Formulae", :integration_test, :no_api do
     it "prints all installed Formulae that are not dependencies of another installed Formula" do
       setup_test_formula "foo"
       setup_test_formula "bar"

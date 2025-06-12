@@ -1,21 +1,20 @@
-# typed: false
 # frozen_string_literal: true
 
 require "utils/formatter"
 require "utils/tty"
 
-describe Formatter do
+RSpec.describe Formatter do
   describe "::columns" do
     subject(:columns) { described_class.columns(input) }
 
-    let(:input) {
+    let(:input) do
       %w[
         aa
         bbb
         ccc
         dd
       ]
-    }
+    end
 
     it "doesn't output columns if $stdout is not a TTY." do
       allow_any_instance_of(IO).to receive(:tty?).and_return(false)
@@ -109,6 +108,20 @@ describe Formatter do
       HELP
 
       expect(described_class.format_help_text(text, width: 80)).to eq expected
+    end
+  end
+
+  describe "::truncate" do
+    it "returns the original string if it's shorter than max length" do
+      expect(described_class.truncate("short", max: 10)).to eq("short")
+    end
+
+    it "truncates strings longer than max length" do
+      expect(described_class.truncate("this is a long string", max: 10)).to eq("this is...")
+    end
+
+    it "uses custom omission string" do
+      expect(described_class.truncate("this is a long string", max: 10, omission: " [...]")).to eq("this [...]")
     end
   end
 end

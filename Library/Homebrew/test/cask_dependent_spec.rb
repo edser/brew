@@ -1,10 +1,9 @@
-# typed: false
 # frozen_string_literal: true
 
 require "cask/cask_loader"
 require "cask_dependent"
 
-describe CaskDependent, :needs_macos do
+RSpec.describe CaskDependent, :needs_macos do
   subject(:dependent) { described_class.new test_cask }
 
   let :test_cask do
@@ -31,7 +30,7 @@ describe CaskDependent, :needs_macos do
     end
   end
 
-  describe "#recursive_dependencies", :integration_test do
+  describe "#recursive_dependencies", :integration_test, :no_api do
     it "is all the dependencies of the cask" do
       setup_test_formula "foo"
       setup_test_formula "bar"

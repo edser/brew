@@ -1,10 +1,14 @@
-# typed: false
 # frozen_string_literal: true
 
-describe Utils do
+RSpec.describe Utils do
   describe "ruby_check_version_script" do
     subject do
-      quiet_system "#{HOMEBREW_LIBRARY_PATH}/utils/ruby_check_version_script.rb", required_ruby_version
+      homebrew_env = ENV.select { |key, _| key.start_with?("HOMEBREW_") }
+      Bundler.with_unbundled_env do
+        ENV.delete_if { |key,| key.start_with?("HOMEBREW_") }
+        ENV.update(homebrew_env)
+        quiet_system "#{HOMEBREW_LIBRARY_PATH}/utils/ruby_check_version_script.rb", required_ruby_version
+      end
     end
 
     before do
@@ -12,13 +16,13 @@ describe Utils do
       ENV.delete("HOMEBREW_USE_RUBY_FROM_PATH")
     end
 
-    describe "succeeds on Homebrew required Ruby version" do
-      let(:required_ruby_version) { HOMEBREW_REQUIRED_RUBY_VERSION }
+    describe "succeeds on the running Ruby version" do
+      let(:required_ruby_version) { RUBY_VERSION }
 
       it { is_expected.to be true }
     end
 
-    describe "succeeds on newer mismatched major/minor required Ruby version and configurated environment" do
+    describe "succeeds on newer mismatched major/minor required Ruby version and configured environment" do
       let(:required_ruby_version) { "2.0.0" }
 
       before do
